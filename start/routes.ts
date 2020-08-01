@@ -20,4 +20,8 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+// Session
+Route.post('/session', 'AuthController.login')
+
+// Users
 Route.post('/users', 'UsersController.store')
