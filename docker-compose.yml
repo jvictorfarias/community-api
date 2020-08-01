@@ -1,0 +1,12 @@
+version: "3.1"
+
+services:
+  community_pg:
+    image: postgres
+    container_name: community
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: community
+    ports:
+      - 5432:5432
