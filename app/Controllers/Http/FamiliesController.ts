@@ -31,4 +31,20 @@ export default class FamiliesController {
 
     return response.status(200).json(family)
   }
+
+  public async destroy ({ params, response, auth }: HttpContextContract){
+    const user = auth.user || await auth.authenticate()
+
+    const familyId = params.id
+
+    const family = await Family.findOrFail(familyId)
+
+    if(!(user.id === family.acs_id)){
+      return response.status(400).json({ error: 'Essa família não está sob seus cuidados.'})
+    }
+
+    await family.delete()
+
+    return response.status(204)
+  }
 }
