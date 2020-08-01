@@ -34,6 +34,50 @@ export default class UsersController {
       ...validated,
     })
 
-    return response.json(user)
+    return response.status(200).json(user)
+  }
+
+  public async update ({ request, response, auth }: HttpContextContract){
+    const user = auth.user || await auth.authenticate()
+
+    user.name = request.input('name') || user.name
+    user.cbo = request.input('cbo') || user.cbo
+    user.cns = request.input('cns') || user.cns
+
+    if(request.input('email')){
+      request.validate({
+        schema: schema.create({
+          email: schema.string({ trim: true}, [
+            rules.email(),
+            rules.unique({ column: 'email', table: 'users' }),
+          ]),
+        }),
+      })
+    }
+
+    if(request.input('newPassword')){
+      request.validate({
+        schema: schema.create({
+          password: schema.string({ trim: true}),
+          newPassword: schema.string({ trim: true }),
+          confirmPassword: schema.string({ trim: true }, [
+            rules.confirmed('newPassword'),
+          ]),
+        }),
+      })
+    }
+
+    await user.save()
+
+    return response.status(200).json(user)
+  }
+
+  public async destroy ({ response, auth }: HttpContextContract){
+    const user = auth.user || await auth.authenticate()
+
+    await user.delete()
+
+    return response.status(200).noContent()
   }
 }
+

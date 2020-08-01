@@ -4,7 +4,10 @@ import {
   column,
   beforeSave,
   BaseModel,
+  hasMany,
+  HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
+import Family from './Family'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -24,6 +27,9 @@ export default class User extends BaseModel {
 
   @column()
   public cbo: string
+
+  @hasMany(() => Family)
+  public families: HasMany<typeof Family>
 
   @column()
   public rememberMeToken?: string

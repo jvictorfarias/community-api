@@ -25,3 +25,10 @@ Route.post('/session', 'AuthController.login')
 
 // Users
 Route.post('/users', 'UsersController.store')
+Route.put('/users', 'UsersController.update').middleware('auth')
+Route.delete('/users', 'UsersController.destroy').middleware('auth')
+
+// Families
+Route.post('/families', 'FamiliesController.store').middleware('auth')
+Route.get('/families/:id', 'FamiliesController.show').middleware('auth')
+Route.put('/families/:id', 'FamiliesController.update').middleware('auth')
