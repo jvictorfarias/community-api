@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import Hash from '@ioc:Adonis/Core/Hash'
 import User from 'App/Models/User'
 
 export default class UsersController {
@@ -56,6 +57,17 @@ export default class UsersController {
     }
 
     if(request.input('newPassword')){
+      const verifyPassword = await Hash.verify(
+        request.input('password'),
+        user.password
+      )
+
+      if(!verifyPassword){
+        return response.status(404).json({
+          status: 'error',
+          message: 'Senha atual não pôde ser verificada.'})
+      }
+
       request.validate({
         schema: schema.create({
           password: schema.string({ trim: true}),
@@ -65,6 +77,8 @@ export default class UsersController {
           ]),
         }),
       })
+
+      user.password = await Hash.make(request.input('newPassword'))
     }
 
     await user.save()
@@ -77,7 +91,7 @@ export default class UsersController {
 
     await user.delete()
 
-    return response.status(200).noContent()
+    return response.status(204).noContent()
   }
 }
 

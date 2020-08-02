@@ -16,7 +16,11 @@ export default class FamiliesController {
   public async show ({ params, response }: HttpContextContract){
     const familyId = params.id
 
-    const family = await Family.query().where('id', familyId).preload('user')
+    const family = await Family
+      .query()
+      .where('id', familyId)
+      .preload('user')
+
     return response.status(200).json(family)
   }
 
@@ -40,7 +44,10 @@ export default class FamiliesController {
     const family = await Family.findOrFail(familyId)
 
     if(!(user.id === family.acs_id)){
-      return response.status(400).json({ error: 'Essa família não está sob seus cuidados.'})
+      return response.status(400).json({
+        status: 'error',
+        message: 'Essa família não está sob seus cuidados.',
+      })
     }
 
     await family.delete()
