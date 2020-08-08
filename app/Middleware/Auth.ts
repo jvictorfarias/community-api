@@ -10,8 +10,8 @@ import { AuthenticationException } from '@adonisjs/auth/build/standalone'
  */
 export default class AuthMiddleware {
   /**
-  * The URL to redirect to when request is Unauthorized
-  */
+   * The URL to redirect to when request is Unauthorized
+   */
   protected redirectTo = '/login'
 
   /**
@@ -22,7 +22,10 @@ export default class AuthMiddleware {
    * of the mentioned guards and that guard will be used by the rest of the code
    * during the current request.
    */
-  protected async authenticate (auth: HttpContextContract['auth'], guards: string[]) {
+  protected async authenticate(
+    auth: HttpContextContract['auth'],
+    guards: string[]
+  ) {
     for (let guard of guards) {
       if (await auth.use(guard).check()) {
         /**
@@ -41,14 +44,18 @@ export default class AuthMiddleware {
     throw new AuthenticationException(
       'Unauthorized access',
       'E_UNAUTHORIZED_ACCESS',
-      this.redirectTo,
+      this.redirectTo
     )
   }
 
   /**
    * Handle request
    */
-  public async handle ({ auth }: HttpContextContract, next: () => Promise<void>, customGuards: string[]) {
+  public async handle(
+    { auth }: HttpContextContract,
+    next: () => Promise<void>,
+    customGuards: string[]
+  ) {
     /**
      * Uses the user defined guards or the default guard mentioned in
      * the config file

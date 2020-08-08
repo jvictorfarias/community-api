@@ -6,7 +6,7 @@ services:
     container_name: community
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD:
+      POSTGRES_PASSWORD: docker
       POSTGRES_DB: community
     ports:
       - 5432:5432

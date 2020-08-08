@@ -1,5 +1,7 @@
 {
   "extends": [
-    "plugin:adonis/typescriptApp"
+    "plugin:adonis/typescriptApp",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ]
 }
